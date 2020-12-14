@@ -1,7 +1,6 @@
 """Flask app for Cupcakes"""
 
-from flask import Flask, jsonify
-from flask_debugtoolbar import DebugToolbarExtension
+from flask import Flask, jsonify, request
 from models import db, connect_db, Cupcake
 
 app = Flask(__name__)
@@ -13,11 +12,6 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 db.create_all()
-
-# Having the Debug Toolbar show redirects explicitly is often useful;
-# # however, if you want to turn it off, you can uncomment this line:
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-toolbar = DebugToolbarExtension(app)
 
 
 @app.route('/api/cupcakes')
@@ -38,3 +32,27 @@ def show_cupcake_info(cupcake_id):
     serialized = cupcake.serialize()
 
     return jsonify(cupcake=serialized)
+
+
+@app.route('/api/cupcakes', methods=["POST"])
+def create_cupcake():
+    """ creates cupcake with flavor, size, rating and image data from the body
+        of the request.
+    """
+
+    cupcake = Cupcake(
+        flavor=request.json["flavor"],
+        size=request.json["size"],
+        rating=request.json["rating"],
+        image=request.json["image"],
+    )
+
+    db.session.add(cupcake)
+    db.session.commit()
+
+    serialized = cupcake.serialize()
+
+    return (jsonify(cupcake=serialized), 201)
+
+
+
