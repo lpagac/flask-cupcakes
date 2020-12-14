@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %} Cupcakes {% endblock %}
+
+{% block content %} 
+
+<ul id="cupcakes-list">
+
+</ul>
+
+<form id="add-cupcake" action="#">
+  <label for="flavor">Flavor</label>
+  <input required type="text">
+  <label for="size">Size</label>
+  <input required type="text">
+  <label for="rating">Rating</label>
+  <input required type="number">
+  <label for="image">Image Url</label>
+  <input required type="url">
+</form>
+
+{% endblock %}

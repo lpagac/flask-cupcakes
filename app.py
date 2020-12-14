@@ -1,6 +1,6 @@
 """Flask app for Cupcakes"""
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, flash, session
 from models import db, connect_db, Cupcake
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 db.create_all()
 
-
+################################### API Routes ###########################
 @app.route('/api/cupcakes')
 def list_all_cupcakes():
     """ Get data about all cupcakes.
@@ -63,7 +63,7 @@ def create_cupcake():
 
 
 @app.route('/api/cupcakes/<int:cupcake_id>', methods=["PATCH"])
-def update_cupcake(cupcake_id):
+def patch_cupcake(cupcake_id):
     """ Update a cupcake with the id passed in the URL and flavor, size, rating
         and image data from the body of the request.
         Respond with JSON of the newly-updated cupcake, like this:
@@ -71,10 +71,10 @@ def update_cupcake(cupcake_id):
     """
     cupcake = Cupcake.query.get_or_404(cupcake_id)
 
-    cupcake["flavor"] = request.json["flavor"]
-    cupcake["size"] = request.json["size"]
-    cupcake["rating"] = request.json["rating"]
-    cupcake["image"] = request.json["image"]
+    cupcake.flavor = request.json["flavor"]
+    cupcake.size = request.json["size"]
+    cupcake.rating = request.json["rating"]
+    cupcake.image = request.json["image"]
 
     db.session.commit()
 
@@ -89,8 +89,16 @@ def delete_cupcake(cupcake_id):
         {message: "Deleted"}
     """
     cupcake = Cupcake.query.get_or_404(cupcake_id)
-    Cupcake.query.filter_by(id=cupcake_id).delete()
+    db.session.delete(cupcake)
 
     db.session.commit()
 
     return jsonify(message="Deleted")
+################################### End of API Routes ###########################
+
+
+@app.route('/')
+def show_cupcakes():
+    """ Return cucpakes list and new cupcake form template """
+
+    return render_template('cupcake-list.html')
