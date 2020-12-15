@@ -51,7 +51,7 @@ def create_cupcake():
         flavor=request.json["flavor"],
         size=request.json["size"],
         rating=request.json["rating"],
-        image=request.json["image"],
+        image=request.json["image"] or None,
     )
 
     db.session.add(cupcake)
@@ -94,7 +94,7 @@ def delete_cupcake(cupcake_id):
     db.session.commit()
 
     return jsonify(message="Deleted")
-################################### End of API Routes ###########################
+########################### End of API Routes ###########################
 
 
 @app.route('/')

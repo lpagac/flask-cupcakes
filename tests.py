@@ -121,7 +121,6 @@ class CupcakeViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
 
             data = resp.json
-            print('**********', data)
             self.assertEqual({
                 "cupcake": {
                     "flavor": "TestPatchedFlavor",
@@ -144,3 +143,7 @@ class CupcakeViewsTestCase(TestCase):
             data = resp.json
             self.assertEqual(data, {"message": "Deleted"})
             self.assertNotIn(id, Cupcake.query.all())
+
+            # test for 404
+            resp = client.delete("/api/cupcakes/k")
+            self.assertEqual(resp.status_code, 404)

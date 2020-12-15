@@ -4,19 +4,35 @@
 
 {% block content %} 
 
-<ul id="cupcakes-list">
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Flavor</th>
+      <th scope="col">Size</th>
+      <th scope="col">Rating</th>
+    </tr>
+    <!-- added by JS -->
+  </thead>
+  <tbody id="cupcakes-list">
 
-</ul>
+  </tbody>
+</table>
 
 <form id="add-cupcake" action="#">
   <label for="flavor">Flavor</label>
-  <input required type="text">
+  <input id="flavor" required type="text">
+
   <label for="size">Size</label>
-  <input required type="text">
+  <input id="size" required type="text">
+
   <label for="rating">Rating</label>
-  <input required type="number">
+  <input id="rating" required type="number">
+
   <label for="image">Image Url</label>
-  <input required type="url">
+  <input id="imgUrl" type="url">
+
+  <button>Add Cupcake</button>
 </form>
 
 {% endblock %}
